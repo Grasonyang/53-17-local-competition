@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="jquery-3.6.3.min.js"></script>
+    <script src="jquery-ui.js"></script>
+    <link rel="stylesheet" href="jquery-ui.css">
+    <link rel="shortcut icon" href="#">
+    <title>Document</title>
+</head>
+<body>
+    <div style="display:flex;border:1px solid black;width: 340px;" class="columns">
+        <div class="rows">
+            <div style="width: 170px;height: 160px;"><img src="1.png" style="width: 170px;height: 160px;"></div>
+            <div style="width: 170px;height: 40px;background-color: aqua;">aaa</div>
+        </div>
+        <div class="rows">
+            <div style="width: 170px;height: 40px;background-color: rgb(91, 191, 20);"></div>
+            <div style="width: 170px;height: 40px;background-color: rgb(141, 255, 242);"></div>
+            <div style="width: 170px;height: 80px;background-color: rgb(91, 191, 20);"></div>
+            <div style="width: 170px;height: 40px;background-color: rgb(167, 167, 167);"></div>
+        </div>
+    </div>
+    <button onclick="leftright()">左右交換</button>
+</body>
+<script>
+    $(document).ready(function(){
+        $(".rows").sortable().disableSelection();
+    });
+    function leftright(){
+        let left=$(".rows:eq(0)");
+        let right=$(".rows:eq(1)");
+        left.before(right);
+    }
+</script>
+</html>
