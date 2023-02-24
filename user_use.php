@@ -20,8 +20,8 @@
 </style>
 <body>
     <button type="button" onclick="location.href='call_mrg.php?call=0'">登出</button>
-    <button type="button" onclick="location.href='users_mrg.php'">會員管理</button>
-    <button type="button" onclick="alltypedata(),$('.place:eq(0)').dialog('open')">上架商品</button>
+    <!-- <button type="button" onclick="location.href='users_mrg.php'">會員管理</button>
+    <button type="button" onclick="alltypedata(),$('.place:eq(0)').dialog('open')">上架商品</button> -->
     <button type="button" onclick="$('.ser').dialog('open')">查尋</button>
     <div class="place place1">
         <div class="actbut">
@@ -143,10 +143,14 @@
     $("#new_link").on('change',function(){
         link=$(this).val();
     });
+    $(document).on('click',".ui-icon-closethick",function(){
+        closee();
+    });
     alltypedata();
     findkw();
     function edt(text){
         $(".firmsend").remove();
+        $(".firmedt").remove();
         $(".actbut").append(`
         <button type="button" onclick="send(2)" class="firmedt">修改</button><br>
         `);
@@ -185,7 +189,6 @@
                             ${arr['ihtml']}
                             
                         </div>
-                        <button type="button" class="ofofj" onclick="edt('${i}')">修改</button>
                     `);
                     $(".row"+i+" .rows .type_img").text("");
                     $(".row"+i+" .rows .type_img").append(`
@@ -221,6 +224,7 @@
     function closee(){
         $(".place").dialog("close");
         $(".firmsend").remove();
+        $(".firmedt").remove();
         $(".actbut").append(`
         <button type="button" onclick="send(1)" class="firmsend">確定送出</button><br>
         `);
@@ -263,7 +267,6 @@
                         success:function(e){
                             closee();
                             findkw();
-                            alltypedata();
                         },
                     });
                 } 

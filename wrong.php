@@ -10,6 +10,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>輸入多次錯誤</h1>
+    <h1>輸入錯誤過多</h1>
 </body>
 </html>

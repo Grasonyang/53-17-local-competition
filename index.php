@@ -13,87 +13,74 @@
     <title>Document</title>
 </head>
 <style>
-    .codeimg{
-        height: 70px;
-        width: 70px;
+    .dp{
+        height:70px;
+        width: 280px;
+        border:1px solid black;
+        display:flex;
     }
 </style>
 <body>
-    <div>
-        <h1></h1>
-        <form action="varify.php?call=1" method="post" onsubmit="return codecount()">
-            <div style="display:flex">
-                <span style="width:120px;">帳號</span>
-                <input type="text" name="id" id="id">
-            </div>
-            <div style="display:flex">
-                <span style="width:120px;">密碼</span>
-                <input type="text" name="pwd" id="pwd">
-            </div>
-            <div style="display:flex">
-                <span style="width:120px;">驗證碼</span>
-                <div style="display:flex;height:70px;width:280px;background-color:black" id="dp1" class="dragplace">
-                    
-                </div>
-                <button type="button" onclick="code_apr()">重新產生</button>
-            </div>
-            <div style="display:flex">
-                <button type="button" style="width:120px;" class="whtype" onclick="click_whtype()">由小到大</button>
-                <input type="hidden" name="whtype" class="whtype">
-                <div style="display:flex;height:70px;width:280px;background-color:black" id="dp2" class="dragplace">
-                    
-                </div>
-                <input type="hidden" name="order" class="order">
-            </div>
-            <input type="hidden" name="theordercode" class="theordercode">
-            <button type="button" onclick="code_apr(),$('#id').val(''),$('#pwd').val('');">清除</button>
-            <button type="submit">送出</button>
-        </form>
-    </div>
+    <h1>咖啡商品展示系統</h1>
+    <form action="call_mrg.php?call=0" method="post" onsubmit="return code_sort()">
+        <span>帳號</span><input type="text" name="upl_act" class="upl upl_act"><br>
+        <span>密碼</span><input type="text" name="upl_pwd" class="upl upl_pwd"><br>
+        <span>驗證碼</span>
+        <div class="dp"></div>
+        <div class="dp"></div>
+        <input type="hidden" name="code" id="code"><input type="hidden" name="code_sorted" id="code_sorted">
+        <button type="button" id="howsort" onclick="sort()">由小到大排列</button>
+        <button type="button" onclick="code();">重新產生</button><br>
+        <button type="button" onclick="$('.upl').val(''),code();">清除</button>
+        <input type="submit" value="登入">
+    </form>
 </body>
 <script>
-    let randcode="";
-    code_apr();
-    $("#dp1,#dp2").sortable({
-        connectWith:".dragplace",
-    }).disableSelection;
-    function codecount(){
-        if($("#dp2").children().length==4){
-            let orderr="";
+    let call="";
+    $(".dp").sortable({
+        connectWith:".dp",
+    });
+    code();
+    function code_sort(){
+        // console.log($(".dp:eq(1)").children());
+        // return false;
+        if($(".dp:eq(1)").children().length==4){
+            let codee="";   
             for(let i=0;i<4;i++){
-                orderr+=$(".codeimg:eq("+i+")").attr('data-value');
+                codee+=$(".dp:eq(1)").children()[i].id;
             }
-            $(".order").val(orderr);
+            $("#code_sorted").val(codee);
             return true;
         }else{
-            alert('請完整回答驗證碼');
+            alert("請完整填寫驗證碼");
             return false;
         }
     }
-    function click_whtype(){
-        if($(".whtype")[0].innerText=="由小到大"){
-            $(".theordercode").val(randcode.split("").sort().reverse().join(""));
-            $(".whtype")[0].innerText="由大到小";
-            $(".whtype")[1].value="1";
+    function code(){
+        $.post({
+            async:false,
+            url:"code.php",
+            success:function(e){
+                call=e;
+                $(".code_img").remove();
+                for(let i=0;i<call.length;i++){
+                    $(".dp:eq(0)").append(`
+                        <div id="${e[i]}" class="code_img"><img style="height:70px;width:70px;" src="code_img.php?call=${e[i]}"></div>
+                    `);
+                }
+                sort();
+                sort();
+            },
+        });
+    }
+    function sort(){
+        if($("#howsort").text()=="由小到大排列"){
+            $("#howsort").text("由大到小排列");
+            $("#code").val(call.split("").sort().join(""));
         }else{
-            $(".theordercode").val(randcode.split("").sort().join(""));
-            $(".whtype")[1].value="0";
-            $(".whtype")[0].innerText="由小到大";
+            $("#howsort").text("由小到大排列");
+            $("#code").val(call.split("").sort().reverse().join(""));
         }
     }
-    function code_apr(){
-        randcode="";
-        $(".codeimg").remove();
-        let ss="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        for(let i=0;i<4;i++){
-            randcode+=ss[Math.floor(Math.random()*ss.length)];
-            $("#dp1").append(`
-                <img src="code.php?call=${randcode[i]}" data-value="${randcode[i]}" alt="A${i}" class="codeimg">
-            `);
-        }
-        click_whtype();
-        click_whtype();
-        
-    };
 </script>
 </html>
